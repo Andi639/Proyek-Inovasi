@@ -1,751 +1,384 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SIGAP RT — Sistem Tanggap Darurat</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<style>
-  :root{
-    --bg: #060b14;
-    --panel: #0d1420;
-    --panel-2: #101a29;
-    --line: #1b2a3d;
-    --cyan: #22d3ee;
-    --green: #34d399;
-    --amber: #fbbf24;
-    --red: #ff3b3b;
-    --text: #e6f1ff;
-    --muted: #7c93ad;
-    --font-head: 'Space Grotesk', sans-serif;
-    --font-mono: 'IBM Plex Mono', monospace;
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    background:
-      radial-gradient(1200px 600px at 15% -10%, rgba(34,211,238,0.07), transparent 60%),
-      radial-gradient(900px 500px at 100% 0%, rgba(52,211,153,0.05), transparent 60%),
-      var(--bg);
-    color:var(--text);
-    font-family:var(--font-head);
-    min-height:100vh;
-  }
-  ::selection{background:rgba(34,211,238,0.3);}
-  a{color:var(--cyan);text-decoration:none;}
-  button{font-family:inherit;}
-  .mono{font-family:var(--font-mono);}
-  .hidden{display:none !important;}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIGAP RT — Sistem Tanggap Darurat Warga</title>
 
-  /* ---------- AUTH SCREEN ---------- */
-  #auth-screen{
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:24px;
-  }
-  .auth-grid{
-    width:100%;
-    max-width:920px;
-    display:grid;
-    grid-template-columns:1.1fr 1fr;
-    background:var(--panel);
-    border:1px solid var(--line);
-    border-radius:4px;
-    overflow:hidden;
-  }
-  .auth-side{
-    padding:40px 36px;
-    background:
-      linear-gradient(180deg, rgba(34,211,238,0.06), transparent 40%),
-      var(--panel-2);
-    border-right:1px solid var(--line);
-    position:relative;
-  }
-  .auth-side .tag{
-    font-family:var(--font-mono);
-    font-size:12px;
-    color:var(--cyan);
-    letter-spacing:0.04em;
-  }
-  .auth-side h1{
-    font-size:30px;
-    line-height:1.15;
-    margin:14px 0 10px;
-    font-weight:700;
-  }
-  .auth-side p{
-    color:var(--muted);
-    font-size:14px;
-    line-height:1.6;
-    max-width:34ch;
-  }
-  .pulse-dot{
-    display:inline-block;width:8px;height:8px;border-radius:50%;
-    background:var(--green); margin-right:8px;
-    box-shadow:0 0 0 0 rgba(52,211,153,0.6);
-    animation:pulse 2s infinite;
-  }
-  @keyframes pulse{
-    0%{box-shadow:0 0 0 0 rgba(52,211,153,0.5);}
-    70%{box-shadow:0 0 0 8px rgba(52,211,153,0);}
-    100%{box-shadow:0 0 0 0 rgba(52,211,153,0);}
-  }
-  .status-strip{
-    margin-top:28px;
-    border-top:1px solid var(--line);
-    padding-top:16px;
-    font-family:var(--font-mono);
-    font-size:12px;
-    color:var(--muted);
-    display:flex;flex-direction:column;gap:6px;
-  }
-  .auth-form{padding:40px 36px;display:flex;flex-direction:column;gap:14px;}
-  .tabs{display:flex;gap:0;margin-bottom:6px;border:1px solid var(--line);border-radius:3px;overflow:hidden;}
-  .tab-btn{
-    flex:1;padding:10px;background:transparent;border:none;color:var(--muted);
-    font-family:var(--font-mono);font-size:13px;cursor:pointer;transition:.15s;
-  }
-  .tab-btn.active{background:rgba(34,211,238,0.1);color:var(--cyan);}
-  label{font-size:12px;color:var(--muted);font-family:var(--font-mono);}
-  input, select{
-    width:100%;padding:11px 12px;background:var(--bg);border:1px solid var(--line);
-    color:var(--text);border-radius:3px;font-family:var(--font-head);font-size:14px;
-    outline:none;
-  }
-  input:focus, select:focus{border-color:var(--cyan);}
-  .btn{
-    padding:12px 16px;border-radius:3px;border:1px solid var(--cyan);
-    background:rgba(34,211,238,0.12);color:var(--cyan);cursor:pointer;
-    font-weight:600;font-size:14px;transition:.15s;
-  }
-  .btn:hover{background:rgba(34,211,238,0.22);}
-  .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--text);}
-  .btn-ghost:hover{border-color:var(--muted);}
-  .form-msg{font-size:12px;color:var(--red);min-height:16px;}
-  .form-hint{font-size:11.5px;color:var(--muted);line-height:1.5;}
+  <!-- Leaflet (peta interaktif) -->
+  <link  rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 
-  /* ---------- APP SHELL ---------- */
-  #app-shell{display:none;min-height:100vh;}
-  #app-shell.active{display:flex;}
-  .sidebar{
-    width:212px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--line);
-    display:flex;flex-direction:column;padding:20px 0;position:sticky;top:0;height:100vh;
-  }
-  .brand{padding:0 20px 18px;border-bottom:1px solid var(--line);margin-bottom:14px;}
-  .brand .tag{font-family:var(--font-mono);font-size:11px;color:var(--cyan);}
-  .brand h2{margin:4px 0 0;font-size:18px;}
-  .nav-item{
-    display:flex;align-items:center;gap:10px;padding:11px 20px;color:var(--muted);
-    cursor:pointer;font-size:14px;border-left:2px solid transparent;transition:.15s;
-  }
-  .nav-item svg{width:16px;height:16px;flex-shrink:0;}
-  .nav-item:hover{color:var(--text);background:rgba(255,255,255,0.02);}
-  .nav-item.active{color:var(--cyan);border-left-color:var(--cyan);background:rgba(34,211,238,0.06);}
-  .nav-footer{margin-top:auto;padding:14px 20px 0;border-top:1px solid var(--line);}
-  .nav-footer .whoami{font-family:var(--font-mono);font-size:12px;color:var(--muted);margin-bottom:10px;}
-  .nav-footer .whoami b{color:var(--text);}
-
-  .main{flex:1;min-width:0;}
-  .topbar{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:16px 28px;border-bottom:1px solid var(--line);
-    position:sticky;top:0;background:rgba(6,11,20,0.85);backdrop-filter:blur(6px);z-index:5;
-  }
-  .topbar .clock{font-family:var(--font-mono);font-size:13px;color:var(--muted);}
-  .topbar .sysstat{font-family:var(--font-mono);font-size:12px;color:var(--green);display:flex;align-items:center;}
-  .view{padding:28px;max-width:1180px;}
-  .view h1{font-size:22px;margin:0 0 4px;}
-  .view .sub{color:var(--muted);font-size:13.5px;margin:0 0 24px;}
-
-  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:26px;}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:16px 18px;}
-  .card .lbl{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:0.03em;}
-  .card .num{font-family:var(--font-mono);font-size:26px;margin-top:6px;color:var(--text);}
-  .card .num.cyan{color:var(--cyan);} .card .num.green{color:var(--green);} .card .num.red{color:var(--red);}
-
-  .panel-box{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:20px;}
-  .panel-box + .panel-box{margin-top:16px;}
-  .panel-box h3{margin:0 0 14px;font-size:15px;}
-
-  table{width:100%;border-collapse:collapse;font-size:13.5px;}
-  th{
-    text-align:left;font-family:var(--font-mono);font-size:11px;color:var(--muted);
-    padding:8px 10px;border-bottom:1px solid var(--line);letter-spacing:0.03em;
-  }
-  td{padding:10px 10px;border-bottom:1px solid var(--line);vertical-align:top;}
-  tr:last-child td{border-bottom:none;}
-  .badge{
-    font-family:var(--font-mono);font-size:11px;padding:3px 8px;border-radius:20px;
-    display:inline-block;border:1px solid transparent;
-  }
-  .badge.menunggu{background:rgba(255,59,59,0.12);color:var(--red);border-color:rgba(255,59,59,0.3);animation:pulse2 1.6s infinite;}
-  .badge.ditangani{background:rgba(251,191,36,0.12);color:var(--amber);border-color:rgba(251,191,36,0.3);}
-  .badge.selesai{background:rgba(52,211,153,0.12);color:var(--green);border-color:rgba(52,211,153,0.3);}
-  @keyframes pulse2{0%,100%{opacity:1;}50%{opacity:0.55;}}
-  select.status-select{padding:5px 8px;font-size:12px;width:auto;}
-
-  /* Panic button page */
-  .panic-wrap{display:flex;flex-direction:column;align-items:center;padding:40px 0 10px;}
-  .panic-btn{
-    width:230px;height:230px;border-radius:50%;
-    background:radial-gradient(circle at 35% 30%, #ff5b5b, #b0161f 75%);
-    border:4px solid rgba(255,255,255,0.15);
-    color:#fff;font-family:var(--font-head);font-weight:700;font-size:22px;
-    cursor:pointer;box-shadow:0 0 0 0 rgba(255,59,59,0.5), 0 10px 30px rgba(0,0,0,0.5);
-    animation:panicPulse 2.2s infinite;
-    letter-spacing:0.02em;
-  }
-  .panic-btn:active{transform:scale(0.97);}
-  @keyframes panicPulse{
-    0%{box-shadow:0 0 0 0 rgba(255,59,59,0.45), 0 10px 30px rgba(0,0,0,0.5);}
-    70%{box-shadow:0 0 0 22px rgba(255,59,59,0), 0 10px 30px rgba(0,0,0,0.5);}
-    100%{box-shadow:0 0 0 0 rgba(255,59,59,0), 0 10px 30px rgba(0,0,0,0.5);}
-  }
-  .panic-caption{margin-top:22px;color:var(--muted);font-size:13.5px;text-align:center;max-width:40ch;line-height:1.5;}
-  .press-count{margin-top:18px;font-family:var(--font-mono);font-size:13px;color:var(--cyan);}
-
-  .modal-overlay{
-    position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;
-    z-index:50;
-  }
-  .modal{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:24px;width:100%;max-width:360px;}
-  .modal h3{margin:0 0 8px;font-size:16px;}
-  .modal p{color:var(--muted);font-size:13px;line-height:1.5;}
-  .modal .row{display:flex;gap:10px;margin-top:18px;}
-  .modal .row .btn{flex:1;text-align:center;}
-  .btn-danger{background:rgba(255,59,59,0.15);border-color:var(--red);color:var(--red);}
-  .btn-danger:hover{background:rgba(255,59,59,0.28);}
-
-  .toast{
-    position:fixed;bottom:24px;right:24px;background:var(--panel);border:1px solid var(--green);
-    border-left:4px solid var(--green);padding:14px 18px;border-radius:3px;max-width:320px;
-    font-size:13px;z-index:60;box-shadow:0 8px 24px rgba(0,0,0,0.5);
-  }
-  .toast .t-title{color:var(--green);font-family:var(--font-mono);font-size:12px;margin-bottom:4px;}
-
-  #map{height:440px;border-radius:4px;border:1px solid var(--line);}
-
-  .tg-log{display:flex;flex-direction:column;gap:10px;max-height:480px;overflow-y:auto;padding-right:4px;}
-  .tg-bubble{
-    background:#132436;border:1px solid var(--line);border-left:3px solid var(--cyan);
-    padding:12px 14px;border-radius:6px;font-size:13px;line-height:1.55;white-space:pre-wrap;
-    font-family:var(--font-mono);
-  }
-  .tg-bubble .tg-time{display:block;color:var(--muted);font-size:11px;margin-top:6px;}
-  .empty-state{color:var(--muted);font-size:13.5px;padding:30px 0;text-align:center;}
-
-  .arch-flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:8px 0 20px;}
-  .arch-node{
-    background:var(--panel-2);border:1px solid var(--line);padding:10px 14px;border-radius:4px;
-    font-family:var(--font-mono);font-size:12px;color:var(--text);
-  }
-  .arch-arrow{color:var(--muted);font-family:var(--font-mono);}
-  .hw-list{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
-  .hw-item{background:var(--panel-2);border:1px solid var(--line);border-radius:4px;padding:14px;}
-  .hw-item .name{font-weight:600;font-size:13.5px;margin-bottom:4px;}
-  .hw-item .desc{color:var(--muted);font-size:12.5px;line-height:1.5;}
-
-  @media (max-width: 860px){
-    .auth-grid{grid-template-columns:1fr;}
-    .auth-side{border-right:none;border-bottom:1px solid var(--line);}
-    .cards{grid-template-columns:repeat(2,1fr);}
-    .hw-list{grid-template-columns:1fr;}
-    #app-shell.active{flex-direction:column;}
-    .sidebar{
-      width:100%;height:auto;position:sticky;top:0;flex-direction:row;overflow-x:auto;
-      padding:10px 6px;
-    }
-    .brand{display:none;}
-    .nav-item{border-left:none;border-bottom:2px solid transparent;padding:8px 12px;white-space:nowrap;}
-    .nav-item.active{border-bottom-color:var(--cyan);}
-    .nav-footer{display:none;}
-    .view{padding:18px;}
-  }
-</style>
+  <!-- Design system -->
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
-<!-- ============ AUTH SCREEN ============ -->
+<!-- ============================================================
+     AUTH SCREEN
+     ============================================================ -->
 <div id="auth-screen">
-  <div class="auth-grid">
-    <div class="auth-side">
-      <span class="tag">// SISTEM TANGGAP DARURAT LINGKUNGAN</span>
-      <h1>SIGAP RT</h1>
-      <p>Satu tombol untuk memanggil bantuan. Setiap laporan tercatat, terpetakan, dan langsung diteruskan ke grup Telegram warga.</p>
-      <div class="status-strip">
-        <div><span class="pulse-dot"></span>Server demo aktif</div>
-        <div>Modul: Tombol Panik · Peta Lokasi · Log Telegram</div>
-        <div>Perangkat lapangan: ESP32 + Tombol Fisik (tahap hardware)</div>
+  <div class="auth-box">
+
+    <!-- Logo -->
+    <div class="auth-logo">
+      <div class="logo-badge">
+        <!-- siren / warning icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <h2>SIGAP RT</h2>
+        <span>Sistem Tanggap Darurat Warga</span>
       </div>
     </div>
-    <div class="auth-form">
-      <div class="tabs">
-        <button class="tab-btn active" id="tab-login" onclick="switchAuthTab('login')">Masuk</button>
-        <button class="tab-btn" id="tab-register" onclick="switchAuthTab('register')">Daftar Akun</button>
-      </div>
 
-      <div id="login-form">
-        <label>Username</label>
-        <input id="login-username" placeholder="cth: budi_rt05">
-        <label>Kata Sandi</label>
-        <input id="login-password" type="password" placeholder="••••••••">
-        <div class="form-msg" id="login-msg"></div>
-        <button class="btn" onclick="doLogin()">Masuk ke Dashboard</button>
-        <div class="form-hint">Login hanya berlaku untuk dashboard web (pengurus & warga). Tombol panik fisik di rumah tetap bisa ditekan tanpa login.</div>
-      </div>
-
-      <div id="register-form" class="hidden">
-        <label>Nama Lengkap</label>
-        <input id="reg-nama" placeholder="Nama sesuai KTP">
-        <label>RT / Blok</label>
-        <input id="reg-rt" placeholder="cth: RT 05 / Blok C">
-        <label>Username</label>
-        <input id="reg-username" placeholder="tanpa spasi">
-        <label>Kata Sandi</label>
-        <input id="reg-password" type="password" placeholder="min. 4 karakter">
-        <div class="form-msg" id="reg-msg"></div>
-        <button class="btn" onclick="doRegister()">Daftar</button>
-        <div class="form-hint">Data demo disimpan di penyimpanan bersama prototipe ini — belum terenkripsi, jangan pakai kata sandi asli.</div>
-      </div>
+    <!-- Tabs Masuk / Daftar -->
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-masuk"  onclick="switchAuthTab('login')">Masuk</button>
+      <button class="auth-tab"        id="tab-daftar" onclick="switchAuthTab('register')">Daftar Akun</button>
     </div>
+
+    <!-- Form Masuk -->
+    <div id="login-form">
+      <div class="field-group">
+        <div>
+          <label for="login-username">Username</label>
+          <input id="login-username" type="text" placeholder="cth: budi_rt05" autocomplete="username">
+        </div>
+        <div>
+          <label for="login-password">Kata Sandi</label>
+          <input id="login-password" type="password" placeholder="••••••••" autocomplete="current-password">
+        </div>
+      </div>
+      <div class="form-error" id="login-msg"></div>
+      <button class="btn btn-primary" onclick="doLogin()">Masuk ke Dashboard</button>
+      <p class="form-note">Login hanya untuk dashboard pengurus &amp; warga. Tombol panik fisik di rumah tetap berfungsi tanpa login.</p>
+    </div>
+
+    <!-- Form Daftar -->
+    <div id="register-form" class="hidden">
+      <div class="field-group">
+        <div>
+          <label for="reg-nama">Nama Lengkap</label>
+          <input id="reg-nama" type="text" placeholder="Nama sesuai KTP" autocomplete="name">
+        </div>
+        <div>
+          <label for="reg-rt">RT / Blok</label>
+          <input id="reg-rt" type="text" placeholder="cth: RT 05 / Blok C">
+        </div>
+        <div>
+          <label for="reg-username">Username</label>
+          <input id="reg-username" type="text" placeholder="tanpa spasi" autocomplete="username">
+        </div>
+        <div>
+          <label for="reg-password">Kata Sandi</label>
+          <input id="reg-password" type="password" placeholder="min. 4 karakter" autocomplete="new-password">
+        </div>
+      </div>
+      <div class="form-error" id="reg-msg"></div>
+      <button class="btn btn-primary" onclick="doRegister()">Daftar</button>
+      <p class="form-note">Data demo disimpan di penyimpanan bersama prototipe ini — belum terenkripsi, jangan gunakan kata sandi asli.</p>
+    </div>
+
   </div>
 </div>
 
-<!-- ============ APP SHELL ============ -->
+
+<!-- ============================================================
+     APP SHELL
+     ============================================================ -->
 <div id="app-shell">
+
+  <!-- Sidebar -->
   <div class="sidebar">
-    <div class="brand">
-      <span class="tag mono">SIGAP · RT</span>
-      <h2>Tanggap Darurat</h2>
+    <div class="sidebar-brand">
+      <div class="brand-logo">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-name">SIGAP RT</div>
+          <div class="brand-sub">Tanggap Darurat</div>
+        </div>
+      </div>
     </div>
-    <div class="nav-item active" data-view="beranda" onclick="goto('beranda')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>
-      Beranda (Panik)
-    </div>
-    <div class="nav-item" data-view="riwayat" onclick="goto('riwayat')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>
-      Riwayat & Data
-    </div>
-    <div class="nav-item" data-view="peta" onclick="goto('peta')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 20l-6-3V4l6 3 6-3 6 3v13l-6-3-6 3z"/><path d="M9 4v13M15 7v13"/></svg>
-      Peta Lokasi
-    </div>
-    <div class="nav-item" data-view="telegram" onclick="goto('telegram')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg>
-      Notifikasi Telegram
-    </div>
-    <div class="nav-item" data-view="arsitektur" onclick="goto('arsitektur')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 10h16M10 4v16"/></svg>
-      Arsitektur Sistem
-    </div>
-    <div class="nav-footer">
-      <div class="whoami">Masuk sebagai<br><b id="whoami-name">-</b></div>
-      <button class="btn btn-ghost" style="width:100%" onclick="doLogout()">Keluar</button>
+
+    <nav class="sidebar-nav">
+      <div class="nav-link active" data-view="beranda" onclick="goto('beranda')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"/>
+          <circle cx="12" cy="12" r="4"/>
+        </svg>
+        Beranda
+      </div>
+      <div class="nav-link" data-view="riwayat" onclick="goto('riwayat')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/>
+        </svg>
+        Riwayat &amp; Data
+      </div>
+      <div class="nav-link" data-view="peta" onclick="goto('peta')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 20l-6-3V4l6 3 6-3 6 3v13l-6-3-6 3z"/>
+          <path d="M9 4v13M15 7v13"/>
+        </svg>
+        Peta Lokasi
+      </div>
+      <div class="nav-link" data-view="telegram" onclick="goto('telegram')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/>
+        </svg>
+        Telegram
+      </div>
+      <div class="nav-link" data-view="arsitektur" onclick="goto('arsitektur')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="4" width="16" height="16" rx="2"/>
+          <path d="M4 10h16M10 4v16"/>
+        </svg>
+        Arsitektur
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-info">
+        Masuk sebagai<br>
+        <strong id="whoami-name">—</strong>
+        <span id="whoami-rt" style="font-size:11px;color:#475569;"></span>
+      </div>
+      <button class="btn btn-ghost btn-sm" style="width:100%;" onclick="doLogout()">Keluar</button>
     </div>
   </div>
 
-  <div class="main">
+  <!-- Main content -->
+  <div class="main-content">
+
+    <!-- Topbar -->
     <div class="topbar">
-      <div class="sysstat"><span class="pulse-dot" style="margin-right:6px;"></span>SISTEM ONLINE</div>
-      <div class="clock mono" id="clock">--:--:--</div>
+      <div class="topbar-left">
+        <div class="status-dot"></div>
+        <span class="topbar-status">Sistem Aktif</span>
+      </div>
+      <div class="topbar-clock" id="clock">--:--:--</div>
     </div>
 
-    <!-- BERANDA (HANYA TOMBOL PANIK) -->
-    <div class="view" id="view-beranda">
-      <h1>Pusat Bantuan Darurat</h1>
-      <p class="sub">Gunakan hanya untuk kondisi darurat nyata — setiap penekanan akan mencatat lokasi Anda dan meneruskan sinyal bahaya ke Telegram RT.</p>
-      <div class="panic-wrap">
-        <button class="panic-btn" onclick="openPanicConfirm()">TEKAN<br>DARURAT</button>
-        <div class="panic-caption">Lokasi perangkat Anda akan dikirimkan secara otomatis. Pastikan izin lokasi browser Anda aktif saat menekan tombol.</div>
-        <div class="press-count mono" id="my-press-count">Kamu sudah menekan 0 kali bulan ini</div>
+    <!-- ===== VIEW: BERANDA (Tombol Panik) ===== -->
+    <div class="page-view" id="view-beranda">
+      <div class="page-header">
+        <h1>Pusat Bantuan Darurat</h1>
+        <p>Tekan tombol di bawah hanya untuk kondisi darurat nyata. Setiap penekanan akan dicatat dan diteruskan ke grup Telegram RT.</p>
+      </div>
+
+      <div class="panic-area">
+        <div class="panic-ring">
+          <button class="panic-button-real" onclick="openPanicConfirm()">
+            TEKAN<br>DARURAT
+          </button>
+        </div>
+        <p class="panic-caption">
+          Lokasi Anda akan dikirim secara otomatis.<br>
+          Pastikan izin lokasi browser sudah aktif.
+        </p>
+        <div class="press-counter" id="my-press-count">Kamu sudah menekan 0 kali bulan ini</div>
       </div>
     </div>
 
-    <!-- RIWAYAT & DATA (SEMUA RINGKASAN TERHUBUNG KE SINI) -->
-    <div class="view hidden" id="view-riwayat">
-      <h1>Riwayat & Statistik Laporan</h1>
-      <p class="sub">Ringkasan status, evaluasi kesiapsiagaan, dan pendataan laporan darurat lingkungan RT.</p>
-      
-      <!-- CARDS DARI BERANDA -->
-      <div class="cards">
-        <div class="card"><div class="lbl">TOTAL LAPORAN</div><div class="num cyan mono" id="stat-total">0</div></div>
-        <div class="card"><div class="lbl">LAPORAN BULAN INI</div><div class="num mono" id="stat-month">0</div></div>
-        <div class="card"><div class="lbl">MENUNGGU RESPON</div><div class="num red mono" id="stat-pending">0</div></div>
-        <div class="card"><div class="lbl">SELESAI DITANGANI</div><div class="num green mono" id="stat-done">0</div></div>
+    <!-- ===== VIEW: RIWAYAT & DATA ===== -->
+    <div class="page-view hidden" id="view-riwayat">
+      <div class="page-header">
+        <h1>Riwayat &amp; Statistik Laporan</h1>
+        <p>Ringkasan status dan seluruh laporan darurat warga RT.</p>
       </div>
 
-      <!-- TABEL RIWAYAT LENGKAP -->
-      <div class="panel-box">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Laporan</div>
+          <div class="stat-value blue" id="stat-total">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Bulan Ini</div>
+          <div class="stat-value" id="stat-month">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Menunggu Respon</div>
+          <div class="stat-value red" id="stat-pending">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Selesai Ditangani</div>
+          <div class="stat-value green" id="stat-done">0</div>
+        </div>
+      </div>
+
+      <div class="panel">
         <h3>Log Seluruh Laporan Masuk</h3>
         <table>
-          <thead><tr><th>#</th><th>Waktu</th><th>Pelapor</th><th>RT</th><th>Lokasi</th><th>Status</th></tr></thead>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Waktu</th>
+              <th>Pelapor</th>
+              <th>RT</th>
+              <th>Koordinat</th>
+              <th>Status</th>
+            </tr>
+          </thead>
           <tbody id="riwayat-table"></tbody>
         </table>
-        <div class="empty-state hidden" id="riwayat-empty">Belum ada riwayat. Data akan muncul di sini setiap kali tombol panik ditekan.</div>
+        <div class="empty-msg hidden" id="riwayat-empty">
+          Belum ada laporan. Data akan muncul di sini setiap kali tombol panik ditekan.
+        </div>
       </div>
     </div>
 
-    <!-- PETA -->
-    <div class="view hidden" id="view-peta">
-      <h1>Peta Lokasi Kejadian</h1>
-      <p class="sub">Penanda merah menunjukkan titik laporan darurat yang tercatat sistem.</p>
-      <div class="panel-box">
+    <!-- ===== VIEW: PETA ===== -->
+    <div class="page-view hidden" id="view-peta">
+      <div class="page-header">
+        <h1>Peta Lokasi Kejadian</h1>
+        <p>Penanda merah menunjukkan titik laporan darurat yang tercatat sistem.</p>
+      </div>
+      <div class="panel" style="padding: 16px;">
         <div id="map"></div>
       </div>
     </div>
 
-    <!-- TELEGRAM -->
-    <div class="view hidden" id="view-telegram">
-      <h1>Notifikasi Telegram</h1>
-      <p class="sub">Simulasi pesan yang dikirim bot ke grup Telegram RT setiap ada laporan darurat.</p>
-      <div class="panel-box">
+    <!-- ===== VIEW: TELEGRAM ===== -->
+    <div class="page-view hidden" id="view-telegram">
+      <div class="page-header">
+        <h1>Notifikasi Telegram</h1>
+        <p>Simulasi pesan yang dikirim bot ke grup Telegram RT setiap ada laporan masuk.</p>
+      </div>
+
+      <div class="panel">
         <h3>Log Pesan Bot</h3>
-        <div class="tg-log" id="tg-log"></div>
-        <div class="empty-state hidden" id="tg-empty">Belum ada notifikasi terkirim.</div>
+        <div class="tg-feed" id="tg-log"></div>
+        <div class="empty-msg hidden" id="tg-empty">Belum ada notifikasi terkirim.</div>
       </div>
-      <div class="panel-box">
+
+      <div class="panel">
         <h3>Cara Kerja Integrasi Nyata</h3>
-        <p style="color:var(--muted);font-size:13px;line-height:1.6;">
-        Token Bot Telegram tidak boleh disimpan di kode front-end karena bisa dicuri siapa saja yang membuka website.
-        Pada implementasi sebenarnya, alur pesan berjalan lewat backend:
+        <p style="color:#64748b;font-size:13.5px;line-height:1.7;margin:0 0 14px;">
+          Token Bot Telegram tidak boleh disimpan di kode front-end karena bisa dibaca siapa saja yang membuka halaman.
+          Pada implementasi sebenarnya, alur pesan berjalan melalui backend:
         </p>
-        <div class="arch-flow">
-          <div class="arch-node">Tombol Ditekan</div><span class="arch-arrow">→</span>
-          <div class="arch-node">Firebase Realtime DB</div><span class="arch-arrow">→</span>
-          <div class="arch-node">Cloud Function</div><span class="arch-arrow">→</span>
-          <div class="arch-node">Telegram Bot API</div><span class="arch-arrow">→</span>
-          <div class="arch-node">Grup Telegram RT</div>
+        <div class="flow-diagram">
+          <div class="flow-node">Tombol Ditekan</div><span class="flow-arrow">→</span>
+          <div class="flow-node">Firebase Realtime DB</div><span class="flow-arrow">→</span>
+          <div class="flow-node">Cloud Function</div><span class="flow-arrow">→</span>
+          <div class="flow-node">Telegram Bot API</div><span class="flow-arrow">→</span>
+          <div class="flow-node">Grup Telegram RT</div>
         </div>
-        <p style="color:var(--muted);font-size:13px;line-height:1.6;">
-        Cloud Function inilah yang menyimpan token bot dengan aman dan memanggil <span class="mono">sendMessage</span> ke Telegram setiap ada data baru masuk ke Firebase.
+        <p style="color:#64748b;font-size:13.5px;line-height:1.7;margin:0;">
+          Cloud Function menyimpan token bot dengan aman dan memanggil <code style="background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:12.5px;">sendMessage</code>
+          ke Telegram setiap ada data baru masuk ke Firebase.
         </p>
       </div>
     </div>
 
-    <!-- ARSITEKTUR -->
-    <div class="view hidden" id="view-arsitektur">
-      <h1>Arsitektur Sistem</h1>
-      <p class="sub">Software dikembangkan lebih dulu sebagai dashboard uji coba, hardware menyusul sebagai perangkat lapangan.</p>
-      <div class="panel-box">
+    <!-- ===== VIEW: ARSITEKTUR ===== -->
+    <div class="page-view hidden" id="view-arsitektur">
+      <div class="page-header">
+        <h1>Arsitektur Sistem</h1>
+        <p>Dashboard software dikembangkan lebih dulu sebagai prototipe; hardware menyusul sebagai perangkat lapangan.</p>
+      </div>
+
+      <div class="panel">
         <h3>Alur Data End-to-End</h3>
-        <div class="arch-flow">
-          <div class="arch-node">Tombol Fisik</div><span class="arch-arrow">→</span>
-          <div class="arch-node">ESP32</div><span class="arch-arrow">→</span>
-          <div class="arch-node">WiFi / GSM</div><span class="arch-arrow">→</span>
-          <div class="arch-node">Firebase</div><span class="arch-arrow">→</span>
-          <div class="arch-node">Web Dashboard</div>
+        <div class="flow-diagram">
+          <div class="flow-node">Tombol Fisik</div><span class="flow-arrow">→</span>
+          <div class="flow-node">ESP32</div><span class="flow-arrow">→</span>
+          <div class="flow-node">WiFi / GSM</div><span class="flow-arrow">→</span>
+          <div class="flow-node">Firebase</div><span class="flow-arrow">→</span>
+          <div class="flow-node">Web Dashboard</div>
         </div>
-        <div class="arch-flow">
-          <div class="arch-node" style="visibility:hidden">Tombol Fisik</div><span class="arch-arrow" style="visibility:hidden">→</span>
-          <div class="arch-node" style="visibility:hidden">ESP32</div><span class="arch-arrow" style="visibility:hidden">→</span>
-          <div class="arch-node" style="visibility:hidden">WiFi / GSM</div><span class="arch-arrow">↳</span>
-          <div class="arch-node">Cloud Function</div><span class="arch-arrow">→</span>
-          <div class="arch-node">Bot Telegram → Sirene Terpusat</div>
+        <div class="flow-diagram">
+          <div class="flow-node" style="visibility:hidden">Tombol Fisik</div><span class="flow-arrow" style="visibility:hidden">→</span>
+          <div class="flow-node" style="visibility:hidden">ESP32</div><span class="flow-arrow" style="visibility:hidden">→</span>
+          <div class="flow-node" style="visibility:hidden">WiFi / GSM</div>
+          <span class="flow-arrow">↳</span>
+          <div class="flow-node">Cloud Function</div><span class="flow-arrow">→</span>
+          <div class="flow-node">Bot Telegram → Sirene Terpusat</div>
         </div>
       </div>
-      <div class="panel-box">
+
+      <div class="panel">
         <h3>1. Software (tahap ini)</h3>
-        <p style="color:var(--muted);font-size:13px;line-height:1.6;">Prototipe yang sedang kamu lihat: login/register, tombol panik simulasi, pendataan riwayat, peta, dan simulasi notifikasi Telegram. Backend nyata memakai Firebase Authentication, Realtime Database/Firestore, dan Cloud Functions untuk menjembatani ke Telegram Bot API.</p>
+        <p style="color:#64748b;font-size:13.5px;line-height:1.7;margin:0;">
+          Prototipe yang sedang kamu lihat: login/register, tombol panik simulasi, riwayat laporan, peta, dan simulasi notifikasi Telegram.
+          Backend nyata menggunakan Firebase Authentication, Realtime Database/Firestore, dan Cloud Functions untuk menjembatani ke Telegram Bot API.
+        </p>
       </div>
-      <div class="panel-box">
+
+      <div class="panel">
         <h3>2. Hardware (tahap lanjutan)</h3>
-        <div class="hw-list">
-          <div class="hw-item"><div class="name">ESP32 / NodeMCU</div><div class="desc">Mikrokontroler dengan WiFi bawaan, mengirim data ke Firebase saat tombol ditekan.</div></div>
-          <div class="hw-item"><div class="name">Push Button darurat</div><div class="desc">Tombol fisik tahan tekan/tahan air, dipasang di titik strategis rumah warga.</div></div>
-          <div class="hw-item"><div class="name">Modul GSM (SIM800L)</div><div class="desc">Cadangan komunikasi untuk area dengan sinyal WiFi lemah.</div></div>
-          <div class="hw-item"><div class="name">Buzzer / Relay Sirine</div><div class="desc">Mengaktifkan sirene terpusat pos ronda saat sinyal darurat diterima.</div></div>
-          <div class="hw-item"><div class="name">Modul GPS (opsional)</div><div class="desc">Jika titik pasang tombol bisa berpindah; jika tetap, koordinat cukup didaftarkan sekali per rumah.</div></div>
-          <div class="hw-item"><div class="name">Baterai cadangan</div><div class="desc">Menjaga perangkat tetap aktif saat listrik padam.</div></div>
+        <div class="hw-grid">
+          <div class="hw-card">
+            <div class="hw-name">ESP32 / NodeMCU</div>
+            <div class="hw-desc">Mikrokontroler dengan WiFi bawaan, mengirim data ke Firebase saat tombol ditekan.</div>
+          </div>
+          <div class="hw-card">
+            <div class="hw-name">Push Button Darurat</div>
+            <div class="hw-desc">Tombol fisik tahan tekan, dipasang di titik strategis rumah warga.</div>
+          </div>
+          <div class="hw-card">
+            <div class="hw-name">Modul GSM (SIM800L)</div>
+            <div class="hw-desc">Cadangan komunikasi untuk area dengan sinyal WiFi lemah.</div>
+          </div>
+          <div class="hw-card">
+            <div class="hw-name">Buzzer / Relay Sirine</div>
+            <div class="hw-desc">Mengaktifkan sirene terpusat pos ronda saat sinyal darurat diterima.</div>
+          </div>
+          <div class="hw-card">
+            <div class="hw-name">Modul GPS (opsional)</div>
+            <div class="hw-desc">Jika titik pasang tombol berpindah; jika tetap, koordinat cukup didaftarkan sekali per rumah.</div>
+          </div>
+          <div class="hw-card">
+            <div class="hw-name">Baterai Cadangan</div>
+            <div class="hw-desc">Menjaga perangkat tetap aktif saat listrik padam.</div>
+          </div>
         </div>
       </div>
-      <div class="panel-box">
+
+      <div class="panel">
         <h3>Catatan Pengembangan Lanjutan</h3>
-        <p style="color:var(--muted);font-size:13px;line-height:1.6;">Dua ide yang bisa dijadikan bab "saran pengembangan" di laporan: (1) tombol panik tetangga terdekat bisa ikut menekan untuk rumah di sekitarnya saat pemilik rumah tidak sempat, dan (2) integrasi kamera CCTV yang otomatis mengirim cuplikan gambar ke grup Telegram begitu sinyal darurat aktif.</p>
+        <p style="color:#64748b;font-size:13.5px;line-height:1.7;margin:0;">
+          Dua ide yang dapat dijadikan bab "saran pengembangan" di laporan: (1) tombol panik tetangga terdekat bisa ikut diaktifkan untuk rumah di sekitarnya saat pemilik rumah tidak sempat, dan (2) integrasi kamera CCTV yang otomatis mengirim cuplikan ke grup Telegram begitu sinyal darurat aktif.
+        </p>
       </div>
     </div>
 
-  </div>
-</div>
+  </div><!-- /main-content -->
+</div><!-- /app-shell -->
 
-<!-- Modal konfirmasi panik -->
-<div class="modal-overlay hidden" id="panic-modal">
-  <div class="modal">
+
+<!-- ============================================================
+     MODAL KONFIRMASI PANIK
+     ============================================================ -->
+<div class="modal-backdrop hidden" id="panic-modal">
+  <div class="modal-card">
     <h3>Kirim Sinyal Darurat?</h3>
-    <p>Tindakan ini akan tercatat sebagai laporan resmi dan langsung diteruskan ke grup Telegram RT. Gunakan hanya untuk keadaan darurat sungguhan.</p>
-    <div class="row">
+    <p>
+      Tindakan ini akan tercatat sebagai laporan resmi dan langsung diteruskan ke grup Telegram RT.
+      Gunakan hanya untuk keadaan darurat yang sungguhan.
+    </p>
+    <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closePanicConfirm()">Batal</button>
-      <button class="btn btn-danger" onclick="confirmPanic()">Ya, Kirim</button>
+      <button class="btn btn-danger" onclick="confirmPanic()">Ya, Kirim Sekarang</button>
     </div>
   </div>
 </div>
 
+<!-- Toast holder -->
 <div id="toast-holder"></div>
 
-<script>
-// ---------------- STATE ----------------
-let currentUser = null;
-let incidents = [];
-let accounts = [];
-let mapInstance = null;
-let mapMarkersLayer = null;
-const DEFAULT_LOC = { lat: -1.2379, lng: 116.8529 }; // fallback: Balikpapan
+<!-- Application logic -->
+<script src="assets/js/app.js"></script>
 
-// ---------------- STORAGE HELPERS ----------------
-async function loadAccounts(){
-  try{
-    const r = await window.storage.get('rt-warga-accounts', true);
-    accounts = r ? JSON.parse(r.value) : [];
-  }catch(e){ accounts = []; }
-}
-async function saveAccounts(){
-  try{ await window.storage.set('rt-warga-accounts', JSON.stringify(accounts), true); }
-  catch(e){ console.error('Gagal menyimpan akun', e); }
-}
-async function loadIncidents(){
-  try{
-    const r = await window.storage.get('rt-incident-log', true);
-    incidents = r ? JSON.parse(r.value) : [];
-  }catch(e){ incidents = []; }
-}
-async function saveIncidents(){
-  try{ await window.storage.set('rt-incident-log', JSON.stringify(incidents), true); }
-  catch(e){ console.error('Gagal menyimpan laporan', e); }
-}
-async function loadSession(){
-  try{
-    const r = await window.storage.get('session-user', false);
-    return r ? r.value : null;
-  }catch(e){ return null; }
-}
-async function saveSession(username){
-  try{ await window.storage.set('session-user', username, false); }catch(e){}
-}
-async function clearSession(){
-  try{ await window.storage.delete('session-user', false); }catch(e){}
-}
-
-// ---------------- AUTH ----------------
-function switchAuthTab(tab){
-  document.getElementById('tab-login').classList.toggle('active', tab==='login');
-  document.getElementById('tab-register').classList.toggle('active', tab==='register');
-  document.getElementById('login-form').classList.toggle('hidden', tab!=='login');
-  document.getElementById('register-form').classList.toggle('hidden', tab!=='register');
-}
-
-async function doRegister(){
-  const nama = document.getElementById('reg-nama').value.trim();
-  const rt = document.getElementById('reg-rt').value.trim();
-  const username = document.getElementById('reg-username').value.trim();
-  const password = document.getElementById('reg-password').value;
-  const msg = document.getElementById('reg-msg');
-  msg.style.color = 'var(--red)';
-  if(!nama || !rt || !username || !password){ msg.textContent = 'Semua kolom wajib diisi.'; return; }
-  if(password.length < 4){ msg.textContent = 'Kata sandi minimal 4 karakter.'; return; }
-  if(accounts.some(a => a.username.toLowerCase() === username.toLowerCase())){
-    msg.textContent = 'Username sudah dipakai, coba yang lain.'; return;
-  }
-  accounts.push({ nama, rt, username, password });
-  await saveAccounts();
-  msg.style.color = 'var(--green)';
-  msg.textContent = 'Berhasil daftar! Silakan masuk.';
-  setTimeout(()=>{ switchAuthTab('login'); document.getElementById('login-username').value = username; }, 700);
-}
-
-async function doLogin(){
-  const username = document.getElementById('login-username').value.trim();
-  const password = document.getElementById('login-password').value;
-  const msg = document.getElementById('login-msg');
-  const acc = accounts.find(a => a.username.toLowerCase() === username.toLowerCase() && a.password === password);
-  if(!acc){ msg.textContent = 'Username atau kata sandi salah.'; return; }
-  currentUser = acc;
-  await saveSession(acc.username);
-  enterApp();
-}
-
-async function doLogout(){
-  currentUser = null;
-  await clearSession();
-  document.getElementById('app-shell').classList.remove('active');
-  document.getElementById('auth-screen').style.display = 'flex';
-}
-
-function enterApp(){
-  document.getElementById('auth-screen').style.display = 'none';
-  document.getElementById('app-shell').classList.add('active');
-  document.getElementById('whoami-name').textContent = currentUser.nama + ' · ' + currentUser.rt;
-  renderAll();
-}
-
-// ---------------- NAVIGATION ----------------
-function goto(viewName){
-  document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-  document.getElementById('view-' + viewName).classList.remove('hidden');
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.view === viewName));
-  if(viewName === 'peta') setTimeout(initOrRefreshMap, 50);
-}
-
-// ---------------- PANIC BUTTON ----------------
-function openPanicConfirm(){ document.getElementById('panic-modal').classList.remove('hidden'); }
-function closePanicConfirm(){ document.getElementById('panic-modal').classList.add('hidden'); }
-
-async function confirmPanic(){
-  closePanicConfirm();
-  let loc = DEFAULT_LOC;
-  try{
-    loc = await new Promise((resolve) => {
-      if(!navigator.geolocation){ resolve(DEFAULT_LOC); return; }
-      navigator.geolocation.getCurrentPosition(
-        pos => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-        () => resolve(DEFAULT_LOC),
-        { timeout: 4000 }
-      );
-    });
-  }catch(e){ loc = DEFAULT_LOC; }
-
-  const record = {
-    id: 'INC-' + Date.now(),
-    waktu: new Date().toISOString(),
-    pelapor: currentUser.nama,
-    username: currentUser.username,
-    rt: currentUser.rt,
-    lat: loc.lat,
-    lng: loc.lng,
-    status: 'Menunggu Respon'
-  };
-  incidents.unshift(record);
-  await saveIncidents();
-  renderAll();
-  showToast('Sinyal Terkirim', 'Notifikasi Telegram grup RT telah dikirim. Tim ronda akan segera merespon.');
-}
-
-function showToast(title, body){
-  const holder = document.getElementById('toast-holder');
-  const el = document.createElement('div');
-  el.className = 'toast';
-  el.innerHTML = '<div class="t-title mono">' + title + '</div>' + body;
-  holder.appendChild(el);
-  setTimeout(()=> el.remove(), 4500);
-}
-
-// ---------------- STATUS CHANGE (admin) ----------------
-async function changeStatus(id, newStatus){
-  const rec = incidents.find(i => i.id === id);
-  if(rec){ rec.status = newStatus; await saveIncidents(); renderAll(); }
-}
-
-// ---------------- RENDER ----------------
-function statusBadge(status){
-  const cls = status === 'Menunggu Respon' ? 'menunggu' : (status === 'Ditangani' ? 'ditangani' : 'selesai');
-  return '<span class="badge ' + cls + '">' + status + '</span>';
-}
-function fmtTime(iso){
-  const d = new Date(iso);
-  return d.toLocaleDateString('id-ID', {day:'2-digit',month:'short',year:'numeric'}) + ' · ' + d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
-}
-
-function renderAll(){
-  renderRiwayat();
-  renderTelegramLog();
-  renderPressCount();
-  if(!document.getElementById('view-peta').classList.contains('hidden')) initOrRefreshMap();
-}
-
-function renderRiwayat(){
-  // Hitung statistik
-  const total = incidents.length;
-  const now = new Date();
-  const monthCount = incidents.filter(i => {
-    const d = new Date(i.waktu);
-    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-  }).length;
-  const pending = incidents.filter(i => i.status === 'Menunggu Respon').length;
-  const done = incidents.filter(i => i.status === 'Selesai').length;
-
-  document.getElementById('stat-total').textContent = total;
-  document.getElementById('stat-month').textContent = monthCount;
-  document.getElementById('stat-pending').textContent = pending;
-  document.getElementById('stat-done').textContent = done;
-
-  // Tampilkan tabel riwayat
-  const tbody = document.getElementById('riwayat-table');
-  const empty = document.getElementById('riwayat-empty');
-  if(incidents.length === 0){ tbody.innerHTML=''; empty.classList.remove('hidden'); return; }
-  empty.classList.add('hidden');
-  tbody.innerHTML = incidents.map((i, idx) => {
-    const options = ['Menunggu Respon','Ditangani','Selesai'].map(s => '<option value="'+s+'"'+(s===i.status?' selected':'')+'>'+s+'</option>').join('');
-    return '<tr><td class="mono">'+(incidents.length-idx)+'</td><td class="mono">'+fmtTime(i.waktu)+'</td><td>'+i.pelapor+'</td><td>'+i.rt+'</td>' +
-      '<td class="mono">'+i.lat.toFixed(4)+', '+i.lng.toFixed(4)+'</td>' +
-      '<td><select class="status-select" onchange="changeStatus(\''+i.id+'\', this.value)">'+options+'</select></td></tr>';
-  }).join('');
-}
-
-function renderTelegramLog(){
-  const log = document.getElementById('tg-log');
-  const empty = document.getElementById('tg-empty');
-  if(incidents.length === 0){ log.innerHTML=''; empty.classList.remove('hidden'); return; }
-  empty.classList.add('hidden');
-  log.innerHTML = incidents.slice(0,20).map(i => {
-    const msg = '🚨 SINYAL DARURAT — ' + i.rt + '\\nPelapor: ' + i.pelapor + '\\nStatus: ' + i.status + '\\nLokasi: ' + i.lat.toFixed(4) + ', ' + i.lng.toFixed(4);
-    return '<div class="tg-bubble">' + msg + '<span class="tg-time">Bot SIGAP-RT · ' + fmtTime(i.waktu) + '</span></div>';
-  }).join('');
-}
-
-function renderPressCount(){
-  if(!currentUser) return;
-  const now = new Date();
-  const mine = incidents.filter(i => i.username === currentUser.username &&
-    new Date(i.waktu).getMonth() === now.getMonth() && new Date(i.waktu).getFullYear() === now.getFullYear());
-  document.getElementById('my-press-count').textContent = 'Kamu sudah menekan ' + mine.length + ' kali bulan ini';
-}
-
-// ---------------- MAP ----------------
-function initOrRefreshMap(){
-  const center = incidents.length ? [incidents[0].lat, incidents[0].lng] : [DEFAULT_LOC.lat, DEFAULT_LOC.lng];
-  if(!mapInstance){
-    mapInstance = L.map('map', { scrollWheelZoom:false }).setView(center, 15);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(mapInstance);
-    mapMarkersLayer = L.layerGroup().addTo(mapInstance);
-  }
-  mapMarkersLayer.clearLayers();
-  const redIcon = L.divIcon({
-    className: '', html: '<div style="width:16px;height:16px;background:#ff3b3b;border:2px solid #fff;border-radius:50%;box-shadow:0 0 8px rgba(255,59,59,0.8);"></div>',
-    iconSize:[16,16], iconAnchor:[8,8]
-  });
-  incidents.forEach(i => {
-    L.marker([i.lat, i.lng], { icon: redIcon })
-      .bindPopup('<b>'+i.pelapor+'</b><br>'+i.rt+'<br>'+fmtTime(i.waktu)+'<br>Status: '+i.status)
-      .addTo(mapMarkersLayer);
-  });
-  if(incidents.length) mapInstance.setView(center, 15);
-  setTimeout(()=> mapInstance.invalidateSize(), 60);
-}
-
-// ---------------- CLOCK ----------------
-function tickClock(){
-  document.getElementById('clock').textContent = new Date().toLocaleTimeString('id-ID');
-}
-setInterval(tickClock, 1000);
-tickClock();
-
-// ---------------- BOOT ----------------
-async function boot(){
-  await loadAccounts();
-  await loadIncidents();
-  const sessionUser = await loadSession();
-  if(sessionUser){
-    const acc = accounts.find(a => a.username === sessionUser);
-    if(acc){ currentUser = acc; enterApp(); return; }
-  }
-}
-boot();
-</script>
 </body>
 </html>

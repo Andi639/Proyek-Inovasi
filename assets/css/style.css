@@ -1,0 +1,905 @@
+/* ============================================================
+   SIGAP RT — Design System
+   Ringan, terang, mudah dibaca siapa saja
+   ============================================================ */
+
+/* ---------- Google Fonts ---------- */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ---------- Reset & base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: #f1f5f9;
+  color: #1e293b;
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+a { color: #0284c7; text-decoration: none; }
+a:hover { text-decoration: underline; }
+button { font-family: inherit; cursor: pointer; }
+input, select { font-family: inherit; }
+
+.hidden { display: none !important; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+/* ============================================================
+   AUTH PAGE
+   ============================================================ */
+#auth-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: #f8fafc;
+}
+
+.auth-box {
+  width: 100%;
+  max-width: 440px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 40px 36px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+}
+
+.auth-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.auth-logo .logo-badge {
+  width: 44px;
+  height: 44px;
+  background: #dc2626;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.auth-logo .logo-badge svg {
+  width: 24px;
+  height: 24px;
+  color: #fff;
+}
+
+.auth-logo .logo-text h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 2px;
+  color: #0f172a;
+}
+
+.auth-logo .logo-text span {
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* Tabs */
+.auth-tabs {
+  display: flex;
+  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 24px;
+  gap: 0;
+}
+
+.auth-tab {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 10px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #94a3b8;
+  position: relative;
+  transition: color 0.15s;
+}
+
+.auth-tab::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #0284c7;
+  transform: scaleX(0);
+  transition: transform 0.2s;
+}
+
+.auth-tab.active {
+  color: #0284c7;
+  font-weight: 600;
+}
+
+.auth-tab.active::after {
+  transform: scaleX(1);
+}
+
+/* Form fields */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.field-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 5px;
+}
+
+.field-group input,
+.field-group select {
+  width: 100%;
+  padding: 10px 13px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1e293b;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  background: #fff;
+}
+
+.field-group input:focus,
+.field-group select:focus {
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(2,132,199,0.12);
+}
+
+.form-error {
+  font-size: 12.5px;
+  color: #dc2626;
+  min-height: 18px;
+  margin: 4px 0;
+}
+
+.form-note {
+  font-size: 12px;
+  color: #94a3b8;
+  line-height: 1.5;
+  margin-top: 8px;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 11px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.btn:active { transform: scale(0.98); }
+
+.btn-primary {
+  background: #0284c7;
+  color: #fff;
+  width: 100%;
+}
+.btn-primary:hover { background: #0369a1; }
+
+.btn-danger {
+  background: #dc2626;
+  color: #fff;
+}
+.btn-danger:hover { background: #b91c1c; }
+
+.btn-ghost {
+  background: transparent;
+  color: #64748b;
+  border: 1.5px solid #e2e8f0;
+}
+.btn-ghost:hover { background: #f8fafc; color: #1e293b; }
+
+.btn-sm {
+  padding: 7px 14px;
+  font-size: 13px;
+}
+
+/* ============================================================
+   APP SHELL
+   ============================================================ */
+#app-shell {
+  display: none;
+  min-height: 100vh;
+}
+
+#app-shell.active {
+  display: flex;
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: #0f172a;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.sidebar-brand {
+  padding: 20px 18px 16px;
+  border-bottom: 1px solid #1e293b;
+}
+
+.sidebar-brand .brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-icon {
+  width: 34px;
+  height: 34px;
+  background: #dc2626;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.brand-icon svg {
+  width: 18px;
+  height: 18px;
+  color: #fff;
+}
+
+.brand-name {
+  font-weight: 700;
+  font-size: 15px;
+  color: #f1f5f9;
+  line-height: 1.2;
+}
+
+.brand-sub {
+  font-size: 11px;
+  color: #64748b;
+  line-height: 1;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  font-size: 14px;
+  color: #94a3b8;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+  border-radius: 0;
+  user-select: none;
+}
+
+.nav-link svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.nav-link:hover {
+  color: #e2e8f0;
+  background: rgba(255,255,255,0.05);
+}
+
+.nav-link.active {
+  color: #38bdf8;
+  border-left-color: #38bdf8;
+  background: rgba(56,189,248,0.08);
+}
+
+.sidebar-footer {
+  padding: 14px 18px;
+  border-top: 1px solid #1e293b;
+}
+
+.user-info {
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.user-info strong {
+  display: block;
+  color: #cbd5e1;
+  font-size: 13px;
+}
+
+/* ---------- Main content ---------- */
+.main-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  background: #fff;
+  border-bottom: 1px solid #e2e8f0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background: #22c55e;
+  border-radius: 50%;
+  animation: blink 2s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.topbar-status {
+  font-size: 13px;
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.topbar-clock {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* ---------- Page views ---------- */
+.page-view {
+  padding: 28px;
+  flex: 1;
+}
+
+.page-header {
+  margin-bottom: 28px;
+}
+
+.page-header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 4px;
+}
+
+.page-header p {
+  color: #64748b;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* ---------- Panels / Cards ---------- */
+.panel {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+
+.panel h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0 0 16px;
+}
+
+/* ---------- Stats grid ---------- */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+
+.stat-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #0f172a;
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1;
+}
+
+.stat-value.blue { color: #0284c7; }
+.stat-value.red { color: #dc2626; }
+.stat-value.green { color: #16a34a; }
+
+/* ---------- Table ---------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+thead th {
+  text-align: left;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0 12px 10px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+tbody td {
+  padding: 12px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+  color: #374151;
+}
+
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: #f8fafc; }
+
+.cell-mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  color: #64748b;
+}
+
+/* Status badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-menunggu {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.badge-ditangani {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.badge-selesai {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.status-select {
+  padding: 5px 8px;
+  font-size: 12.5px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  color: #374151;
+  background: #fff;
+  outline: none;
+}
+
+.status-select:focus {
+  border-color: #0284c7;
+}
+
+.empty-msg {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 14px;
+  padding: 32px 0;
+}
+
+/* ============================================================
+   BERANDA — TOMBOL PANIK
+   ============================================================ */
+.panic-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 0 24px;
+}
+
+/* Ring animasi */
+.panic-ring {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.panic-ring::before,
+.panic-ring::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(220,38,38,0.25);
+  animation: ring-out 2.4s cubic-bezier(0,0,0.6,1) infinite;
+}
+
+.panic-ring::after {
+  animation-delay: 1.2s;
+}
+
+@keyframes ring-out {
+  0%   { transform: scale(1);   opacity: 0.6; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* Tombol bulat fisik realistis */
+.panic-button-real {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: none;
+  background: radial-gradient(circle at 38% 34%, #f87171, #dc2626 55%, #991b1b);
+  box-shadow:
+    0 6px 0 #7f1d1d,
+    0 8px 20px rgba(220,38,38,0.5),
+    inset 0 2px 4px rgba(255,255,255,0.2);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+  position: relative;
+  z-index: 1;
+}
+
+.panic-button-real:hover {
+  background: radial-gradient(circle at 38% 34%, #fca5a5, #ef4444 55%, #b91c1c);
+}
+
+.panic-button-real:active {
+  transform: translateY(4px);
+  box-shadow:
+    0 2px 0 #7f1d1d,
+    0 4px 10px rgba(220,38,38,0.4),
+    inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.panic-caption {
+  text-align: center;
+  color: #64748b;
+  font-size: 13.5px;
+  max-width: 42ch;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.press-counter {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15,23,42,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 24px;
+  backdrop-filter: blur(2px);
+}
+
+.modal-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 28px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+.modal-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 8px;
+}
+
+.modal-card p {
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0 0 20px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.modal-actions .btn { flex: 1; }
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #22c55e;
+  border-radius: 10px;
+  padding: 14px 18px;
+  max-width: 320px;
+  font-size: 13.5px;
+  color: #374151;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  z-index: 200;
+  animation: toast-in 0.25s ease;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.toast-title {
+  font-weight: 700;
+  color: #16a34a;
+  font-size: 13px;
+  margin-bottom: 3px;
+}
+
+/* ============================================================
+   PETA
+   ============================================================ */
+#map {
+  height: 440px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+}
+
+/* ============================================================
+   TELEGRAM LOG
+   ============================================================ */
+.tg-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+.tg-message {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 3px solid #0284c7;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  color: #374151;
+}
+
+.tg-message .tg-meta {
+  display: block;
+  font-size: 11.5px;
+  color: #94a3b8;
+  margin-top: 6px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ============================================================
+   ARSITEKTUR
+   ============================================================ */
+.flow-diagram {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0 20px;
+}
+
+.flow-node {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 9px 14px;
+  font-size: 13px;
+  color: #374151;
+  font-weight: 500;
+}
+
+.flow-arrow {
+  color: #94a3b8;
+  font-size: 16px;
+}
+
+.hw-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.hw-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.hw-card .hw-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #0f172a;
+  margin-bottom: 5px;
+}
+
+.hw-card .hw-desc {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 992px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  #app-shell.active {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: sticky;
+    top: 0;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0;
+    z-index: 20;
+  }
+
+  .sidebar-brand {
+    display: none;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+    padding: 0;
+    gap: 0;
+    width: 100%;
+  }
+
+  .nav-link {
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 12px;
+    font-size: 11px;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .nav-link.active {
+    border-bottom-color: #38bdf8;
+    border-left-color: transparent;
+  }
+
+  .sidebar-footer {
+    display: none;
+  }
+
+  .page-view {
+    padding: 16px;
+  }
+
+  .hw-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .topbar {
+    padding: 12px 16px;
+  }
+
+  .panic-ring {
+    width: 220px;
+    height: 220px;
+  }
+
+  .panic-button-real {
+    width: 150px;
+    height: 150px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 500px) {
+  .auth-box {
+    padding: 28px 20px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
