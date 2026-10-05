@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#b91c1c"/>
+    </linearGradient>
+  </defs>
+  <!-- Background with rounded corners -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)"/>
+  
+  <!-- Outer subtle shield glow border -->
+  <path d="M256 70 L390 120 C390 260 256 385 256 385 C256 385 122 260 122 120 Z" 
+        fill="none" stroke="#f87171" stroke-width="4" stroke-opacity="0.3"/>
+        
+  <!-- Main Shield -->
+  <path d="M256 80 L380 126 C380 252 256 370 256 370 C256 370 132 252 132 126 Z" 
+        fill="url(#shieldGrad)"/>
+        
+  <!-- Emergency Warning Icon inside -->
+  <g transform="translate(196, 140) scale(5)" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+    <line x1="12" y1="9" x2="12" y2="13"/>
+    <line x1="12" y1="17" x2="12.01" y2="17"/>
+  </g>
+  
+  <!-- Text Label SIGAP RT -->
+  <text x="256" y="440" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="40" font-weight="800" fill="#f8fafc" text-anchor="middle" letter-spacing="4">SIGAP RT</text>
+</svg>
